@@ -1,0 +1,58 @@
+
+
+entity Beer{
+	manufacturer String required,
+	name String required,
+	country String,
+    image String,
+	price Double,
+	description String,
+    quantity Long,
+    archive Boolean
+}
+entity Client{
+
+}
+
+entity Category{
+	name String required,
+    stautus Boolean
+}
+
+entity OrderItem{
+}
+entity Order{
+	orderDate LocalDate required,
+    shipDate LocalDate required,
+    disCount Integer,
+    total Double required min(0),
+    price Double required min(0),
+    quantity Long required min(1),
+	stautus Boolean
+}
+
+relationship OneToOne {
+	Client{user(userId)} to User,
+}
+
+relationship OneToMany {
+	Category to Beer{category}
+    Client to Order{client}
+    Order to OrderItem{orderId}
+    Beer to OrderItem{beer}
+}
+
+
+// defining multiple oneToOne relationships
+
+// Set pagination options
+paginate Beer , Category, Order, OrderItem with pagination
+
+// Use Data Transfer Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Beer, Category, Order, OrderItem
+
+// Set an angular suffix
+// angularSuffix * with mySuffix

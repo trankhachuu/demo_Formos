@@ -1,0 +1,28 @@
+{
+  "name": "OrderItem",
+  "fields": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "order",
+      "otherEntityRelationshipName": "orderItem",
+      "relationshipName": "orderId"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "beer",
+      "otherEntityRelationshipName": "orderItem",
+      "relationshipName": "beer"
+    }
+  ],
+  "entityTableName": "order_item",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211218035056"
+}

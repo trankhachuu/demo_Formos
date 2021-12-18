@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-order-item-heading" data-cy="OrderItemCreateUpdateHeading" jhiTranslate="formosBeerApp.orderItem.home.createOrEditLabel">
+        Create or edit a Order Item
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="formosBeerApp.orderItem.orderId" for="field_orderId">Order Id</label>
+          <select class="form-control" id="field_orderId" data-cy="orderId" name="orderId" formControlName="orderId">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="orderOption.id === editForm.get('orderId')!.value?.id ? editForm.get('orderId')!.value : orderOption"
+              *ngFor="let orderOption of ordersSharedCollection; trackBy: trackOrderById"
+            >
+              {{ orderOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="formosBeerApp.orderItem.beer" for="field_beer">Beer</label>
+          <select class="form-control" id="field_beer" data-cy="beer" name="beer" formControlName="beer">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="beerOption.id === editForm.get('beer')!.value?.id ? editForm.get('beer')!.value : beerOption"
+              *ngFor="let beerOption of beersSharedCollection; trackBy: trackBeerById"
+            >
+              {{ beerOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

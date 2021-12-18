@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="orderItem">
+      <h2 data-cy="orderItemDetailsHeading"><span jhiTranslate="formosBeerApp.orderItem.detail.title">Order Item</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ orderItem.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.orderItem.orderId">Order Id</span></dt>
+        <dd>
+          <div *ngIf="orderItem.orderId">
+            <a [routerLink]="['/order', orderItem.orderId?.id, 'view']">{{ orderItem.orderId?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.orderItem.beer">Beer</span></dt>
+        <dd>
+          <div *ngIf="orderItem.beer">
+            <a [routerLink]="['/beer', orderItem.beer?.id, 'view']">{{ orderItem.beer?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/order-item', orderItem.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

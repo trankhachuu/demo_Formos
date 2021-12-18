@@ -1,0 +1,66 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="beer">
+      <h2 data-cy="beerDetailsHeading"><span jhiTranslate="formosBeerApp.beer.detail.title">Beer</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ beer.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.manufacturer">Manufacturer</span></dt>
+        <dd>
+          <span>{{ beer.manufacturer }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.name">Name</span></dt>
+        <dd>
+          <span>{{ beer.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.country">Country</span></dt>
+        <dd>
+          <span>{{ beer.country }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.image">Image</span></dt>
+        <dd>
+          <span>{{ beer.image }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.price">Price</span></dt>
+        <dd>
+          <span>{{ beer.price }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.description">Description</span></dt>
+        <dd>
+          <span>{{ beer.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.quantity">Quantity</span></dt>
+        <dd>
+          <span>{{ beer.quantity }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.archive">Archive</span></dt>
+        <dd>
+          <span>{{ beer.archive }}</span>
+        </dd>
+        <dt><span jhiTranslate="formosBeerApp.beer.category">Category</span></dt>
+        <dd>
+          <div *ngIf="beer.category">
+            <a [routerLink]="['/category', beer.category?.id, 'view']">{{ beer.category?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/beer', beer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
