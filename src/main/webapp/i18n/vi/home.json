@@ -1,7 +1,7 @@
 {
   "home": {
-    "title": "Chào mừng bạn đến với Java Hipster!",
-    "subtitle": "Đây là trang chủ của bạn",
+    "title": "Chào mừng bạn đến shopping",
+    "subtitle": "Đến với chúng tôi bạn có thể mua sắm loại beer mà bạn muốn",
     "logged": {
       "message": "Bạn đang đăng nhập bằng tài khoản \"{{username}}\"."
     },

@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-import { isPresent } from 'app/core/util/operators';
+import { Injectable } from '@angular/core';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IBeer, getBeerIdentifier } from '../beer.model';
+import { isPresent } from 'app/core/util/operators';
+import { Observable } from 'rxjs';
+import { getBeerIdentifier, IBeer } from '../beer.model';
+
 
 export type EntityResponseType = HttpResponse<IBeer>;
 export type EntityArrayResponseType = HttpResponse<IBeer[]>;
@@ -14,7 +14,7 @@ export type EntityArrayResponseType = HttpResponse<IBeer[]>;
 export class BeerService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/beers');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) { }
 
   create(beer: IBeer): Observable<EntityResponseType> {
     return this.http.post<IBeer>(this.resourceUrl, beer, { observe: 'response' });

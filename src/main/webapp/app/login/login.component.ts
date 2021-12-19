@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { Login } from './login.model';
 
 @Component({
   selector: 'jhi-login',
@@ -12,6 +13,7 @@ import { AccountService } from 'app/core/auth/account.service';
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('username', { static: false })
   username!: ElementRef;
+  dataLogin!: Login;
 
   authenticationError = false;
 
@@ -43,11 +45,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   login(): void {
     this.loginService
-      .login({
-        username: this.loginForm.get('username')!.value,
-        password: this.loginForm.get('password')!.value,
-        rememberMe: this.loginForm.get('rememberMe')!.value,
-      })
+      .login(this.getLogin())
       .subscribe(
         () => {
           this.authenticationError = false;
@@ -58,5 +56,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
         },
         () => (this.authenticationError = true)
       );
+  }
+
+  getLogin() : Login {
+    this.dataLogin = {
+      username: this.loginForm.get('username')!.value,
+      password: this.loginForm.get('password')!.value,
+      rememberMe: this.loginForm.get('rememberMe')!.value,
+    };
+    localStorage.setItem('dataLogin', JSON.stringify(this.dataLogin));
+    return this.dataLogin;
   }
 }

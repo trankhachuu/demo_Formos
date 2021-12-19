@@ -1,7 +1,9 @@
 package formos.demo.executor.web.rest;
 
 import formos.demo.executor.domain.Order;
+import formos.demo.executor.dto.SaveMenuDataRequestDTO;
 import formos.demo.executor.repository.OrderRepository;
+import formos.demo.executor.service.OrderService;
 import formos.demo.executor.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,9 +43,11 @@ public class OrderResource {
     private String applicationName;
 
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
-    public OrderResource(OrderRepository orderRepository) {
+    public OrderResource(OrderRepository orderRepository, OrderService orderService) {
         this.orderRepository = orderRepository;
+        this.orderService = orderService;
     }
 
     /**
@@ -202,5 +206,10 @@ public class OrderResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @PostMapping("/orders/save-data")
+    public void saveOrderData(@RequestBody SaveMenuDataRequestDTO request) {
+        this.orderService.saveOrderData(request);
     }
 }

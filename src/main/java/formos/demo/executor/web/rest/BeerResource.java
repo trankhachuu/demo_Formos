@@ -206,4 +206,11 @@ public class BeerResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/beers/get-all-beer")
+    public ResponseEntity<List<Beer>> getAllBeersMenu() {
+        log.debug("REST request to get a page of Beers");
+        List<Beer> page = beerRepository.findAll();
+        return ResponseEntity.ok().body(page);
+    }
 }

@@ -1,0 +1,35 @@
+{
+    "formosBeerApp": {
+      "menu": {
+        "home": {
+          "title": "Menu",
+          "menuList": "MenuList",
+          "refreshListLabel": "Refresh list",
+          "createLabel": "Thêm mới một Beer",
+          "createOrEditLabel": "Thêm mới hoặc cập nhật Beer",
+          "notFound": "No Beers found"
+        },
+        "created": "Một Beer mới được tạo với định danh {{ param }}",
+        "updated": "Một Beer cập nhật với định danh {{ param }}",
+        "deleted": "Một Beer đã xóa với định danh {{ param }}",
+        "delete": {
+          "question": "Bạn có chắc là muốn xóa Beer {{ id }}?"
+        },
+        "detail": {
+          "title": "Beer"
+        },
+        "id": "ID",
+        "manufacturer": "Manufacturer",
+        "name": "Name",
+        "country": "Country",
+        "image": "Image",
+        "price": "Price",
+        "description": "Description",
+        "quantity": "Quantity",
+        "archive": "Archive",
+        "orderItem": "Order Item",
+        "category": "Category"
+      }
+    }
+  }
+  
