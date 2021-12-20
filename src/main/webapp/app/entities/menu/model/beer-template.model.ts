@@ -16,6 +16,7 @@ export interface IBeerTemplate {
   total: number;
   username?: string | null;
   password?: string | null;
+  clientID?: number | null;
 }
 
 export class BeerTemplate implements IBeerTemplate {
@@ -33,7 +34,8 @@ export class BeerTemplate implements IBeerTemplate {
     public categories?: ICategory[] | null,
     public total: number = 0,
     public username?: string | null,
-    public password?: string | null
+    public password?: string | null,
+    public clientID?: number | null
   ) {
     this.archive = this.archive ?? false;
   }

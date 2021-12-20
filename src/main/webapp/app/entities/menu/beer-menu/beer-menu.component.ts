@@ -8,14 +8,16 @@ import { BeerMenuService } from './../service/beer-menu.service';
 @Component({
   selector: 'jhi-beer-menu',
   templateUrl: './beer-menu.component.html',
-  styleUrls: ['./beer-menu.component.scss']
+  styleUrls: ['./beer-menu.component.scss'],
 })
 export class BeerMenuComponent implements OnInit {
   listBeer: BeerTemplate[] = [];
   beerItemList: BeerTemplate[] = [];
   beerMenu: BeerMenu;
+  clientId?: number;
   constructor(private beerService: BeerMenuService) {
     this.beerMenu = new BeerMenu([]);
+    this.clientId = undefined;
   }
 
   ngOnInit(): void {
@@ -23,31 +25,36 @@ export class BeerMenuComponent implements OnInit {
   }
 
   showData(): void {
-    const dataLogin: Login = JSON.parse(localStorage.getItem("dataLogin") as string);
-
-    this.beerService.getALlBeer("/get-all-beer").subscribe(
-      (res) => {
+    const dataLogin: Login = JSON.parse(localStorage.getItem('dataLogin') as string);
+    const username = dataLogin.username ? dataLogin.username : '';
+    this.beerService.getALlBeer('/get-all-beer/' + username).subscribe(
+      res => {
         this.listBeer = res;
         this.listBeer.forEach(item => {
           item.username = dataLogin.username;
           item.password = dataLogin.password;
-        })
+          if (item.clientID) {
+            this.clientId = item.clientID;
+          }
+        });
       },
-      (error) => {
+      error => {
         this.handleError(error);
-      });
+      }
+    );
   }
 
   getALlBeer(): void {
     this.showData();
 
-    this.beerService.getALlBeer("/get-all-beer").subscribe(
-      (res) => {
+    this.beerService.getALlBeer('/get-all-beer').subscribe(
+      res => {
         this.beerItemList = res;
       },
-      (error) => {
+      error => {
         this.handleError(error);
-      });
+      }
+    );
   }
 
   handleError(error: any): Observable<never> {
@@ -56,14 +63,17 @@ export class BeerMenuComponent implements OnInit {
   }
 
   addtocart(item: BeerTemplate): void {
-    this.getTotalPrice("plus", item);
+    this.getTotalPrice('plus', item);
   }
 
   removetocart(item: BeerTemplate): void {
-    this.getTotalPrice("minus", item);
+    this.getTotalPrice('minus', item);
   }
 
   clearData(): void {
+    if (this.clientId) {
+      this.beerService.deleteClient(this.clientId);
+    }
     this.showData();
   }
 
@@ -74,8 +84,8 @@ export class BeerMenuComponent implements OnInit {
       if (e.id === item.id) {
         price = e.price;
       }
-    })
-    this.listBeer.forEach((a) => {
+    });
+    this.listBeer.forEach(a => {
       // check data total. if total undefined ? 0 : total
       if (!a.total && a.total !== 0) {
         a.total = 0;
@@ -99,9 +109,7 @@ export class BeerMenuComponent implements OnInit {
               a.price = price;
             }
           }
-        }
-        else if (data === 'minus') {
-
+        } else if (data === 'minus') {
           if (a.price <= 0) {
             return;
           }
@@ -118,7 +126,7 @@ export class BeerMenuComponent implements OnInit {
         }
         dem++;
       }
-    })
+    });
   }
 
   saveMenuData(): void {
@@ -126,14 +134,15 @@ export class BeerMenuComponent implements OnInit {
       if (item.total && item.total !== 0) {
         this.beerMenu.dataRequests.push(item);
       }
-    })
+    });
     this.beerService.saveMenu(this.beerMenu).subscribe(
-      (res) => {
+      res => {
         this.showData();
-        window.alert("thanh cong");
+        window.alert('thanh cong');
       },
-      (error) => {
+      error => {
         this.handleError(error);
-      });
+      }
+    );
   }
 }

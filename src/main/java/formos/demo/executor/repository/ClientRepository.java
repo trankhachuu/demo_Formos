@@ -2,6 +2,7 @@ package formos.demo.executor.repository;
 
 import formos.demo.executor.domain.Client;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {}
+public interface ClientRepository extends JpaRepository<Client, Long> {
+    @Query(value = "SELECT *  FROM client WHERE client.user_id=:userId", nativeQuery = true)
+    Client getClientByUserId(@Param("userId") Long userId);
+}

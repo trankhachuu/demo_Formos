@@ -2,6 +2,7 @@ package formos.demo.executor.web.rest;
 
 import formos.demo.executor.domain.Order;
 import formos.demo.executor.dto.SaveMenuDataRequestDTO;
+import formos.demo.executor.dto.response.GetAllCartResponseDTO;
 import formos.demo.executor.repository.OrderRepository;
 import formos.demo.executor.service.OrderService;
 import formos.demo.executor.web.rest.errors.BadRequestAlertException;
@@ -211,5 +212,14 @@ public class OrderResource {
     @PostMapping("/orders/save-data")
     public void saveOrderData(@RequestBody SaveMenuDataRequestDTO request) {
         this.orderService.saveOrderData(request);
+    }
+
+    @GetMapping("/orders/get-client/{username}")
+    public ResponseEntity<GetAllCartResponseDTO> saveOrderData(@PathVariable String username) {
+        GetAllCartResponseDTO response = new GetAllCartResponseDTO();
+        response.setClient(this.orderService.getClient(username));
+        response.setSuccess(true);
+        response.setMessage("SUCCESS");
+        return new ResponseEntity<GetAllCartResponseDTO>(response, HttpStatus.OK);
     }
 }

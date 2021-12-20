@@ -1,10 +1,14 @@
 package formos.demo.executor.web.rest;
 
-import formos.demo.executor.domain.Beer;
+import formos.demo.executor.domain.*;
+import formos.demo.executor.dto.BeerDTO;
 import formos.demo.executor.repository.BeerRepository;
+import formos.demo.executor.repository.ClientRepository;
+import formos.demo.executor.repository.UserRepository;
 import formos.demo.executor.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +44,13 @@ public class BeerResource {
     private String applicationName;
 
     private final BeerRepository beerRepository;
+    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
 
-    public BeerResource(BeerRepository beerRepository) {
+    public BeerResource(BeerRepository beerRepository, ClientRepository clientRepository, UserRepository userRepository) {
         this.beerRepository = beerRepository;
+        this.clientRepository = clientRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -208,9 +215,65 @@ public class BeerResource {
     }
 
     @GetMapping("/beers/get-all-beer")
-    public ResponseEntity<List<Beer>> getAllBeersMenu() {
+    public ResponseEntity<List<BeerDTO>> getAllBeersMenu() {
         log.debug("REST request to get a page of Beers");
-        List<Beer> page = beerRepository.findAll();
+        List<BeerDTO> page = beerToBeerDTO();
         return ResponseEntity.ok().body(page);
+    }
+
+    @GetMapping("/beers/get-all-beer/{username}")
+    public ResponseEntity<List<BeerDTO>> getAllBeersMenu(@PathVariable String username) {
+        log.debug("REST request to get a page of Beers");
+        List<BeerDTO> page = beerToBeerDTO();
+
+        Optional<User> user = this.userRepository.findOneByLogin(username);
+        if (user.isPresent()) {
+            Client client = this.clientRepository.getClientByUserId(user.get().getId());
+            if (client != null) {
+                for (int i = 0; i < page.size(); i++) {
+                    page = getUserId(page, client);
+                }
+            }
+        }
+        return ResponseEntity.ok().body(page);
+    }
+
+    private List<BeerDTO> getUserId(List<BeerDTO> beerList, Client client) {
+        for (int i = 0; i < beerList.size(); i++) {
+            for (Order order : client.getOrders()) {
+                for (OrderItem orderItem : order.getOrderItems()) {
+                    Beer beer = orderItem.getBeer();
+                    if (beerList.get(i).getId() == beer.getId()) {
+                        beerList.get(i).setTotal(order.getTotal().longValue());
+                        beerList.get(i).setPrice(order.getPrice());
+                        beerList.get(i).setClientID(client.getId());
+                        beerList.get(i).setUsername(client.getUser().getLogin());
+                        beerList.get(i).setPassword(client.getUser().getPassword());
+                    }
+                }
+            }
+        }
+        return beerList;
+    }
+
+    private List<BeerDTO> beerToBeerDTO() {
+        List<Beer> beerList = beerRepository.findAll();
+        List<BeerDTO> beerDTOS = new ArrayList<>();
+        for (Beer beer : beerList) {
+            BeerDTO beerDTO = new BeerDTO();
+            beerDTO.setId(beer.getId());
+            beerDTO.setManufacturer(beer.getManufacturer());
+            beerDTO.setName(beer.getName());
+            beerDTO.setCountry(beer.getCountry());
+            beerDTO.setImage(beer.getImage());
+            beerDTO.setPrice(beer.getPrice());
+            beerDTO.setDescription(beer.getDescription());
+            beerDTO.setQuantity(beer.getQuantity());
+            beerDTO.setArchive(beer.getArchive());
+            beerDTO.setOrderItems(beer.getOrderItems());
+            beerDTO.setCategory(beer.getCategory());
+            beerDTOS.add(beerDTO);
+        }
+        return beerDTOS;
     }
 }

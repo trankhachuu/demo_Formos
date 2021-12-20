@@ -1,3 +1,5 @@
+import { Account } from './../../../core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,12 +25,14 @@ export class BeerComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  currentAccount: Account | null = null;
 
   constructor(
     protected beerService: BeerService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected accountService: AccountService
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
@@ -54,6 +58,7 @@ export class BeerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.accountService.identity().subscribe(account => (this.currentAccount = account));
     this.handleNavigation();
   }
 
