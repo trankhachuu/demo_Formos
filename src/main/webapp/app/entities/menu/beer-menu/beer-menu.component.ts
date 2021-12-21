@@ -72,7 +72,14 @@ export class BeerMenuComponent implements OnInit {
 
   clearData(): void {
     if (this.clientId) {
-      this.beerService.deleteClient(this.clientId);
+      this.beerService.deleteClient(this.clientId).subscribe(
+        res => {
+          console.log(res);
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
     this.showData();
   }

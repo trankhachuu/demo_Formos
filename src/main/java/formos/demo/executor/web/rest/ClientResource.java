@@ -2,8 +2,6 @@ package formos.demo.executor.web.rest;
 
 import formos.demo.executor.domain.Client;
 import formos.demo.executor.repository.ClientRepository;
-import formos.demo.executor.repository.OrderItemRepository;
-import formos.demo.executor.repository.OrderRepository;
 import formos.demo.executor.service.ClientService;
 import formos.demo.executor.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -34,21 +32,11 @@ public class ClientResource {
     private String applicationName;
 
     private final ClientService clientService;
-
     private final ClientRepository clientRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final OrderRepository orderRepository;
 
-    public ClientResource(
-        ClientService clientService,
-        ClientRepository clientRepository,
-        OrderItemRepository orderItemRepository,
-        OrderRepository orderRepository
-    ) {
+    public ClientResource(ClientService clientService, ClientRepository clientRepository) {
         this.clientService = clientService;
         this.clientRepository = clientRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.orderRepository = orderRepository;
     }
 
     /**
@@ -182,15 +170,7 @@ public class ClientResource {
     @DeleteMapping("/delete-beer-menu/{id}")
     public ResponseEntity<Void> deleteClientInMenu(@PathVariable Long id) {
         log.debug("REST request to delete Client : {}", id);
-        Client client = this.clientRepository.getClientByUserId(id);
-        clientService.delete(id);
-        client
-            .getOrders()
-            .forEach(item -> {
-                this.orderItemRepository.deleteOrderItemByOrderId(item.getId());
-                this.orderRepository.deleteById(item.getId());
-            });
-
+        clientService.deleteClientInMenu(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
