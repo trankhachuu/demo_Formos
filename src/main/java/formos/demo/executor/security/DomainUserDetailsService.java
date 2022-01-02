@@ -40,12 +40,7 @@ public class DomainUserDetailsService implements UserDetailsService {
                 .map(user -> createSpringSecurityUser(login, user))
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
         }
-
-        String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        return userRepository
-            .findOneWithAuthoritiesByLogin(lowercaseLogin)
-            .map(user -> createSpringSecurityUser(lowercaseLogin, user))
-            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
+        throw new UsernameNotFoundException("User with email " + login + " was not found in the database");
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
@@ -57,6 +52,6 @@ public class DomainUserDetailsService implements UserDetailsService {
             .stream()
             .map(authority -> new SimpleGrantedAuthority(authority.getName()))
             .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
     }
 }

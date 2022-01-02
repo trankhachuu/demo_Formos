@@ -2,7 +2,9 @@
   "login": {
     "title": "Đăng nhập",
     "form": {
+      "email": "email",
       "password": "Mật khẩu",
+      "email.placeholder": "Nhập email của bạn",
       "password.placeholder": "Nhập mật khầu của bạn",
       "rememberme": "Nhớ tài khoản",
       "button": "Đăng nhập"

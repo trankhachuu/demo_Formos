@@ -3,12 +3,12 @@ package formos.demo.executor.service;
 import formos.demo.executor.config.Constants;
 import formos.demo.executor.domain.Authority;
 import formos.demo.executor.domain.User;
+import formos.demo.executor.dto.AdminUserDTO;
+import formos.demo.executor.dto.UserDTO;
 import formos.demo.executor.repository.AuthorityRepository;
 import formos.demo.executor.repository.UserRepository;
 import formos.demo.executor.security.AuthoritiesConstants;
 import formos.demo.executor.security.SecurityUtils;
-import formos.demo.executor.dto.AdminUserDTO;
-import formos.demo.executor.dto.UserDTO;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -288,7 +288,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByEmailIgnoreCase);
     }
 
     /**
