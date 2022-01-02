@@ -11,14 +11,14 @@ import { Login } from './login.model';
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit, AfterViewInit {
-  @ViewChild('username', { static: false })
-  username!: ElementRef;
+  @ViewChild('email', { static: false })
+  email!: ElementRef;
   dataLogin!: Login;
 
   authenticationError = false;
 
   loginForm = this.fb.group({
-    username: [null, [Validators.required]],
+    email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     password: [null, [Validators.required]],
     rememberMe: [false],
   });
@@ -40,27 +40,25 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.username.nativeElement.focus();
+    this.email.nativeElement.focus();
   }
 
   login(): void {
-    this.loginService
-      .login(this.getLogin())
-      .subscribe(
-        () => {
-          this.authenticationError = false;
-          if (!this.router.getCurrentNavigation()) {
-            // There were no routing during login (eg from navigationToStoredUrl)
-            this.router.navigate(['']);
-          }
-        },
-        () => (this.authenticationError = true)
-      );
+    this.loginService.login(this.getLogin()).subscribe(
+      () => {
+        this.authenticationError = false;
+        if (!this.router.getCurrentNavigation()) {
+          // There were no routing during login (eg from navigationToStoredUrl)
+          this.router.navigate(['']);
+        }
+      },
+      () => (this.authenticationError = true)
+    );
   }
 
-  getLogin() : Login {
+  getLogin(): Login {
     this.dataLogin = {
-      username: this.loginForm.get('username')!.value,
+      email: this.loginForm.get('email')!.value,
       password: this.loginForm.get('password')!.value,
       rememberMe: this.loginForm.get('rememberMe')!.value,
     };

@@ -26,12 +26,12 @@ export class BeerMenuComponent implements OnInit {
 
   showData(): void {
     const dataLogin: Login = JSON.parse(localStorage.getItem('dataLogin') as string);
-    const username = dataLogin.username ? dataLogin.username : '';
-    this.beerService.getALlBeer('/get-all-beer/' + username).subscribe(
+    const email = dataLogin.email ? dataLogin.email : '';
+    this.beerService.getALlBeer('/get-all-beer/' + email).subscribe(
       res => {
         this.listBeer = res;
         this.listBeer.forEach(item => {
-          item.username = dataLogin.username;
+          item.username = dataLogin.email;
           item.password = dataLogin.password;
           if (item.clientID) {
             this.clientId = item.clientID;

@@ -7,17 +7,40 @@
       </div>
       <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
         <div class="form-group">
-          <label class="username-label" for="username" jhiTranslate="global.form.username.label">Login</label>
-          <input
-            type="text"
-            class="form-control"
-            name="username"
-            id="username"
-            placeholder="{{ 'global.form.username.placeholder' | translate }}"
-            formControlName="username"
-            #username
-            data-cy="username"
-          />
+          <label class="form-control-label" jhiTranslate="userManagement.email">Email</label>
+          <input type="email" class="form-control" name="email" formControlName="email" />
+
+          <div *ngIf="loginForm.get('email')!.invalid && (loginForm.get('email')!.dirty || loginForm.get('email')!.touched)">
+            <small class="form-text text-danger" *ngIf="loginForm.get('email')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="loginForm.get('email')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 100 }"
+            >
+              This field cannot be longer than 100 characters.
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="loginForm.get('email')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 5 }"
+            >
+              This field is required to be at least 5 characters.
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="loginForm.get('email')?.errors?.email"
+              jhiTranslate="global.messages.validate.email.invalid"
+            >
+              Your email is invalid.
+            </small>
+          </div>
         </div>
 
         <div class="form-group">

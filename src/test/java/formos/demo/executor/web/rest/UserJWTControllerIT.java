@@ -11,8 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import formos.demo.executor.IntegrationTest;
 import formos.demo.executor.domain.User;
-import formos.demo.executor.repository.UserRepository;
 import formos.demo.executor.dto.LoginRequestDTO;
+import formos.demo.executor.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -49,7 +49,7 @@ class UserJWTControllerIT {
         userRepository.saveAndFlush(user);
 
         LoginRequestDTO login = new LoginRequestDTO();
-        login.setUsername("user-jwt-controller");
+        login.setEmail("user-jwt-controller@example.com");
         login.setPassword("test");
         mockMvc
             .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(login)))
@@ -72,7 +72,7 @@ class UserJWTControllerIT {
         userRepository.saveAndFlush(user);
 
         LoginRequestDTO login = new LoginRequestDTO();
-        login.setUsername("user-jwt-controller-remember-me");
+        login.setEmail("user-jwt-controller-remember-me@example.com");
         login.setPassword("test");
         login.setRememberMe(true);
         mockMvc
@@ -87,7 +87,7 @@ class UserJWTControllerIT {
     @Test
     void testAuthorizeFails() throws Exception {
         LoginRequestDTO login = new LoginRequestDTO();
-        login.setUsername("wrong-user");
+        login.setEmail("wrong-email");
         login.setPassword("wrong password");
         mockMvc
             .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(login)))

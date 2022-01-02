@@ -1,7 +1,7 @@
 export interface ICartUser {
-  username?: string;
+  email?: string;
 }
 
 export class CartUser implements ICartUser {
-  constructor(public username?: string) {}
+  constructor(public email?: string) {}
 }

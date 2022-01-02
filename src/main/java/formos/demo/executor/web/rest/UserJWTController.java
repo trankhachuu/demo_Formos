@@ -1,9 +1,9 @@
 package formos.demo.executor.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import formos.demo.executor.dto.LoginRequestDTO;
 import formos.demo.executor.security.jwt.JWTFilter;
 import formos.demo.executor.security.jwt.TokenProvider;
-import formos.demo.executor.dto.LoginRequestDTO;
 import javax.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class UserJWTController {
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginRequestDTO loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            loginVM.getUsername(),
+            loginVM.getEmail(),
             loginVM.getPassword()
         );
 

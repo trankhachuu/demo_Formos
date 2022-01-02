@@ -19,8 +19,8 @@ export class ListMenuComponent implements OnInit {
 
   ngOnInit(): void {
     const dataLogin: Login = JSON.parse(localStorage.getItem('dataLogin') as string);
-    this.cartUser.username = dataLogin.username;
-    this.beerMenuService.getClient(this.cartUser.username).subscribe(res => {
+    this.cartUser.email = dataLogin.email;
+    this.beerMenuService.getClient(this.cartUser.email).subscribe(res => {
       if (res) {
         this.cartClient = res.client;
         console.log(this.cartClient);
